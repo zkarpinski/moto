@@ -467,7 +467,7 @@ class FakeStack(CloudFormationModel):
     def parse_template(template: str) -> Dict[str, Any]:  # type: ignore[misc]
         yaml.add_multi_constructor("", yaml_tag_constructor)
         try:
-            return yaml.load(template, Loader=yaml.Loader)
+            return yaml.load(template, Loader=yaml.SafeLoader)
         except (ParserError, ScannerError):
             return json.loads(template)
 
@@ -648,7 +648,7 @@ class FakeChangeSet(BaseModel):
     def _parse_template(self) -> None:
         yaml.add_multi_constructor("", yaml_tag_constructor)
         try:
-            self.template_dict = yaml.load(self.template, Loader=yaml.Loader)
+            self.template_dict = yaml.load(self.template, Loader=yaml.SafeLoader)
         except (ParserError, ScannerError):
             self.template_dict = json.loads(self.template)
 
