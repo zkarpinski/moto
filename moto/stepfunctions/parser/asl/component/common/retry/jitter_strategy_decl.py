@@ -1,10 +1,10 @@
 import enum
-import random
 from typing import Final
 
 from moto.stepfunctions.parser.asl.antlr.runtime.ASLLexer import ASLLexer
 from moto.stepfunctions.parser.asl.component.eval_component import EvalComponent
 from moto.stepfunctions.parser.asl.eval.environment import Environment
+import secrets
 
 
 class JitterStrategy(enum.Enum):
@@ -31,5 +31,5 @@ class JitterStrategyDecl(EvalComponent):
             return
 
         interval_seconds = env.stack.pop()
-        jitter_interval = random.uniform(0, interval_seconds)
+        jitter_interval = secrets.SystemRandom().uniform(0, interval_seconds)
         env.stack.append(jitter_interval)
