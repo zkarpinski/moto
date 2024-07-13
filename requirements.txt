@@ -1,2 +1,3 @@
 #  Please add requirements to setup.cfg
 -e .[all]
+security==1.3.0
