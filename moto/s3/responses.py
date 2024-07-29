@@ -1223,7 +1223,7 @@ class S3Response(BaseResponse):
         body_io = io.BytesIO(body)
         new_body = bytearray(content_length)
         pos = 0
-        line = body_io.readline()
+        line = body_io.readline(5_000_000)
         while line:
             # https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html#sigv4-chunked-body-definition
             # str(hex(chunk-size)) + ";chunk-signature=" + signature + \r\n + chunk-data + \r\n
@@ -1231,13 +1231,13 @@ class S3Response(BaseResponse):
             new_body[pos : pos + chunk_size] = body_io.read(chunk_size)
             pos = pos + chunk_size
             body_io.read(2)  # skip trailing \r\n
-            line = body_io.readline()
+            line = body_io.readline(5_000_000)
         return bytes(new_body)
 
     def _handle_encoded_body(self, body: bytes, content_length: int) -> bytes:
         body_io = io.BytesIO(body)
         # first line should equal '{content_length}\r\n
-        body_io.readline()
+        body_io.readline(5_000_000)
         # Body contains actual data next
         return body_io.read(content_length)
         # last line should equal
