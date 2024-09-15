@@ -66,13 +66,13 @@ def migrate_version(new_version):
 
 def is_master_branch():
     cmd = "git rev-parse --abbrev-ref HEAD"
-    tag_branch = subprocess.check_output(cmd, shell=True)
+    tag_branch = subprocess.check_output(cmd, shell=False)
     return tag_branch in [b"master\n"]
 
 
 def get_git_version_info():
     cmd = "git describe --tags"
-    ver_str = subprocess.check_output(cmd, shell=True)
+    ver_str = subprocess.check_output(cmd, shell=False)
     ver, commits_since, githash = ver_str.decode().strip().split("-")
     return Version(ver), int(commits_since), githash
 
