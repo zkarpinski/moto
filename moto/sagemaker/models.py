@@ -1,6 +1,5 @@
 import json
 import os
-import random
 import re
 import string
 from collections import defaultdict
@@ -33,6 +32,7 @@ from .utils import (
     load_pipeline_definition_from_s3,
     validate_model_approval_status,
 )
+import secrets
 
 PAGINATION_MODEL = {
     "list_experiments": {
@@ -3838,7 +3838,7 @@ class SageMakerModelBackend(BaseBackend):
     ) -> Dict[str, str]:
         pipeline = get_pipeline_from_name(self.pipelines, pipeline_name)
         execution_id = "".join(
-            random.choices(string.ascii_lowercase + string.digits, k=12)
+            secrets.SystemRandom().choices(string.ascii_lowercase + string.digits, k=12)
         )
         pipeline_execution_arn = arn_formatter(
             _type="pipeline",
