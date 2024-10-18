@@ -194,7 +194,7 @@ class Rule(CloudFormationModel):
                         method=api_destination.http_method,
                         url=url,
                         headers=headers,
-                    )
+                    timeout=60)
             else:
                 raise NotImplementedError(f"Expr not defined for {type(self)}")
 

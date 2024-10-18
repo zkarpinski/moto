@@ -353,7 +353,7 @@ class ServerModeMockAWS(MockAWS):
                 ServerModeMockAWS._RESET_IN_PROGRESS = True
                 import requests
 
-                requests.post(f"{self._test_server_mode_endpoint}/moto-api/reset")
+                requests.post(f"{self._test_server_mode_endpoint}/moto-api/reset", timeout=60)
                 ServerModeMockAWS._RESET_IN_PROGRESS = False
 
     def _enable_patching(self, reset: bool = True) -> None:
@@ -419,7 +419,7 @@ class ProxyModeMockAWS(MockAWS):
                 ProxyModeMockAWS._RESET_IN_PROGRESS = True
                 import requests
 
-                requests.post(f"{self._test_proxy_mode_endpoint}/moto-api/reset")
+                requests.post(f"{self._test_proxy_mode_endpoint}/moto-api/reset", timeout=60)
                 ProxyModeMockAWS._RESET_IN_PROGRESS = False
 
     def _enable_patching(self, reset: bool = True) -> None:
