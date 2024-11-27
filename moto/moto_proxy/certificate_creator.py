@@ -5,6 +5,7 @@ from subprocess import PIPE, Popen
 from uuid import uuid4
 
 from . import debug, info
+from security import safe_command
 
 
 def join_with_script_dir(path: str) -> str:
@@ -99,7 +100,7 @@ class CertificateCreator:
                 ]
                 commands.extend(["-subj", subject, "-config", config_template_name])
 
-                p1 = Popen(commands)
+                p1 = safe_command.run(Popen, commands)
                 p1.communicate()
                 debug(f"Created CSR in {server_csr}")
 
