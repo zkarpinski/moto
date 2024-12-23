@@ -54,7 +54,7 @@ class RESTError(HTTPException):
         "wrapped_single_error": WRAPPED_SINGLE_ERROR_RESPONSE,
         "error": ERROR_RESPONSE,
     }
-    env = Environment(loader=DictLoader(templates))
+    env = Environment(loader=DictLoader(templates), autoescape=True)
 
     def __init__(
         self, error_type: str, message: str, template: str = "error", **kwargs: Any
@@ -104,7 +104,7 @@ class RESTError(HTTPException):
         # Can be simplified to cls.templates | extended_templates when we drop Python 3.8 support
         # https://docs.python.org/3/library/stdtypes.html#mapping-types-dict
         templates = dict(cls.templates.items() | extended_templates.items())
-        return Environment(loader=DictLoader(templates))
+        return Environment(loader=DictLoader(templates), autoescape=True)
 
 
 class DryRunClientError(RESTError):
