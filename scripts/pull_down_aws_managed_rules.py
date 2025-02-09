@@ -49,6 +49,7 @@ import sys
 
 from lxml import html
 import requests
+from security import safe_requests
 
 MANAGED_RULES_OUTPUT_FILENAME = "../moto/config/resources/aws_managed_rules.json"
 
@@ -209,7 +210,7 @@ def main():
     for link in links:
         if args.verbose:
             print(f"Extracting from {link} ...")
-        page = requests.get(AWS_CONFIG_MANAGED_RULES_URL_START + link)
+        page = safe_requests.get(AWS_CONFIG_MANAGED_RULES_URL_START + link)
         rule_name = link.rstrip(".html")
         rules = extract_managed_rule_info(html.fromstring(page.content), rule_name)
 
