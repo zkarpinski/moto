@@ -1,13 +1,13 @@
-import random
 import re
 import string
 
 from .exceptions import ValidationException
+import secrets
 
 
 def random_id(size: int = 10) -> str:
     chars = list(range(10)) + list(string.ascii_lowercase)
-    return "".join(str(random.choice(chars)) for x in range(size))
+    return "".join(str(secrets.choice(chars)) for x in range(size))
 
 
 def validate_name(name: str) -> None:

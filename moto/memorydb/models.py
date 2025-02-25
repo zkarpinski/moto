@@ -1,7 +1,6 @@
 """MemoryDBBackend class with methods for supported APIs."""
 
 import copy
-import random
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -22,6 +21,7 @@ from .exceptions import (
     SubnetGroupNotFoundFault,
     TagNotFoundFault,
 )
+import secrets
 
 
 class MemoryDBCluster(BaseModel):
@@ -125,7 +125,7 @@ class MemoryDBCluster(BaseModel):
                 node = {
                     "Name": node_name,
                     "Status": "available",
-                    "AvailabilityZone": f"{self.region}{random.choice(azs)}",
+                    "AvailabilityZone": f"{self.region}{secrets.choice(azs)}",
                     "CreateTime": datetime.now().strftime(
                         "%Y-%m-%dT%H:%M:%S.000%f+0000"
                     ),
@@ -140,7 +140,7 @@ class MemoryDBCluster(BaseModel):
                 "Name": shard_name,
                 # Set to 'available', other options are 'creating', 'modifying' , 'deleting'.
                 "Status": "available",
-                "Slots": f"0-{str(random.randint(10000,99999))}",
+                "Slots": f"0-{str(secrets.SystemRandom().randint(10000,99999))}",
                 "Nodes": nodes,
                 "NumberOfNodes": num_nodes,
             }

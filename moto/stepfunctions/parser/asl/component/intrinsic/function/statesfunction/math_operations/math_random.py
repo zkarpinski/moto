@@ -1,4 +1,3 @@
-import random
 from typing import Any
 
 from moto.stepfunctions.parser.asl.component.intrinsic.argument.function_argument_list import (
@@ -14,6 +13,7 @@ from moto.stepfunctions.parser.asl.component.intrinsic.functionname.states_funct
     StatesFunctionName,
 )
 from moto.stepfunctions.parser.asl.eval.environment import Environment
+import secrets
 
 
 class MathRandom(StatesFunction):
@@ -66,6 +66,6 @@ class MathRandom(StatesFunction):
         end = self._validate_integer_value(args.pop(), "end")
         start = self._validate_integer_value(args.pop(), "start")
 
-        rand_gen = random.Random(seed)
+        rand_gen = secrets.SystemRandom().Random(seed)
         rand_int = rand_gen.randint(start, end)
         env.stack.append(rand_int)

@@ -1,6 +1,4 @@
 """ShieldBackend class with methods for supported APIs."""
-
-import random
 import string
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -17,6 +15,7 @@ from moto.shield.exceptions import (
     ValidationException,
 )
 from moto.utilities.tagging_service import TaggingService
+import secrets
 
 
 @dataclass
@@ -119,7 +118,7 @@ class Subscription:
 
     def __post_init__(self) -> None:
         if self.subscription_arn == "":
-            subscription_id = "".join(random.choices(string.hexdigits[:16], k=12))
+            subscription_id = "".join(secrets.SystemRandom().choices(string.hexdigits[:16], k=12))
             subscription_id_formatted = "-".join(
                 [subscription_id[i : i + 4] for i in range(0, 12, 4)]
             )

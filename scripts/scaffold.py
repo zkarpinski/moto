@@ -21,7 +21,6 @@ TODO:
 """
 
 import os
-import random
 import re
 import inspect
 import importlib
@@ -41,6 +40,7 @@ from moto.core.responses import BaseResponse
 from moto.core.base_backend import BaseBackend
 from inflection import singularize
 from implementation_coverage import get_moto_implementation
+import secrets
 
 PRIMITIVE_SHAPES = [
     "string",
@@ -324,7 +324,7 @@ def get_func_in_tests(service, operation):
     Throws an exception by default, to remind the user to implement this
     """
     escaped_service = get_escaped_service(service)
-    random_region = random.choice(["us-east-2", "eu-west-1", "ap-southeast-1"])
+    random_region = secrets.choice(["us-east-2", "eu-west-1", "ap-southeast-1"])
     body = "\n\n"
     body += f"@mock_aws\n"
     body += f"def test_{operation}():\n"
