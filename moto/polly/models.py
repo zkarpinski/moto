@@ -1,12 +1,12 @@
 import datetime
 from typing import Any, Dict, List, Optional
-from xml.etree import ElementTree as ET
 
 from moto.core.base_backend import BackendDict, BaseBackend
 from moto.core.common_models import BaseModel
 
 from .resources import VOICE_DATA
 from .utils import make_arn_for_lexicon
+import defusedxml.ElementTree
 
 
 class Lexicon(BaseModel):
@@ -28,7 +28,7 @@ class Lexicon(BaseModel):
 
         # Probably a very naive approach, but it'll do for now.
         try:
-            root = ET.fromstring(self.content)
+            root = defusedxml.ElementTree.fromstring(self.content)
             self.size = len(self.content)
             self.last_modified = int(  # type: ignore
                 (
