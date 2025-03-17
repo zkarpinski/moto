@@ -297,3 +297,36 @@ class StepFunctionResponse(BaseResponse):
             tolerated_failure_percentage=tolerated_failure_percentage,
         )
         return 200, {}, "{}"
+
+    def create_activity(self) -> TYPE_RESPONSE:
+        name = self._get_param("name")
+        tags = self._get_param("tags")
+        encryption_configuration = self._get_param("encryptionConfiguration")
+        activity_arn, creation_date = self.stepfunction_backend.create_activity(
+            name=name,
+            tags=tags,
+            encryption_configuration=encryption_configuration,
+        )
+        return json.dumps(
+            dict(activityArn=activity_arn, creationDate=str(creation_date))
+        )
+    
+    def list_activities(self):
+        params = self._get_params()
+        max_results = params.get("maxResults")
+        next_token = params.get("nextToken")
+        activities, next_token = self.stepfunctions_backend.list_activities(
+            max_results=max_results,
+            next_token=next_token,
+        )
+        # TODO: adjust response
+        return json.dumps(dict(activities=activities, nextToken=next_token))
+    
+    def describe_activity(self):
+        params = self._get_params()
+        activity_arn = params.get("activityArn")
+        activity_arn, name, creation_date, encryption_configuration = self.stepfunctions_backend.describe_activity(
+            activity_arn=activity_arn,
+        )
+        # TODO: adjust response
+        return json.dumps(dict(activityArn=activity_arn, name=name, creationDate=creation_date, encryptionConfiguration=encryption_configuration))

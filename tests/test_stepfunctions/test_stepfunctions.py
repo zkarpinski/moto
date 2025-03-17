@@ -1087,3 +1087,31 @@ def test_version_is_only_available_when_published():
 
 def _get_default_role():
     return "arn:aws:iam::" + ACCOUNT_ID + ":role/unknown_sf_role"
+
+
+@mock_aws
+def test_create_activity():
+    region = "ap-southeast-1"
+    activity_name = "my-test-activity"
+    client = boto3.client("stepfunctions", region_name=region)
+    resp = client.create_activity(name=activity_name)
+
+    expected_arn = f"arn:aws:states:{region}:{ACCOUNT_ID}:activity:{activity_name}"
+    assert resp["activityArn"] == expected_arn
+    assert resp["creationDate"] is not None
+
+
+@mock_aws
+def test_list_activities():
+    client = boto3.client("stepfunctions", region_name="eu-west-1")
+    resp = client.list_activities()
+
+    raise Exception("NotYetImplemented")
+
+
+@mock_aws
+def test_describe_activity():
+    client = boto3.client("stepfunctions", region_name="us-east-2")
+    resp = client.describe_activity()
+
+    raise Exception("NotYetImplemented")

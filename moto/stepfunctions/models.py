@@ -1,7 +1,7 @@
 import json
 import re
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Pattern
+from typing import Any, Dict, List, Optional, Pattern, Tuple
 
 from dateutil.tz import tzlocal
 
@@ -448,6 +448,31 @@ class Execution:
         self.stop_date = datetime.now()
 
 
+class Activity:
+    def __init__(
+        self,
+        account_id: str,
+        region_name: str,
+        name: str,
+        tags: Optional[List[Dict[str, str]]] = None,
+        encryption_configuration: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        self.name = name
+        self.tags = tags
+        self.encryption_configuration = encryption_configuration
+        self.creation_date = datetime.now()
+        self.arn = f"arn:aws:states:{region_name}:{account_id}:activity:{name}"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "activityArn": self.arn,
+            "name": self.name,
+            "tags": self.tags,
+            "encryptionConfiguration": self.encryption_configuration,
+            "creationDate": self.creation_date,
+        }
+
+
 class StepFunctionBackend(BaseBackend):
     """
     Configure Moto to explicitly parse and execute the StateMachine:
@@ -580,6 +605,7 @@ class StepFunctionBackend(BaseBackend):
     def __init__(self, region_name: str, account_id: str):
         super().__init__(region_name, account_id)
         self.state_machines: List[StateMachine] = []
+        self.activities: Dict[str, Activity] = {}
         self._account_id = None
 
     def create_state_machine(
@@ -828,5 +854,27 @@ class StepFunctionBackend(BaseBackend):
             )
         return self.describe_state_machine(state_machine_arn)
 
+    def create_activity(
+        self,
+        name: str,
+        tags: Optional[List[Dict[str, str]]] = None,
+        encryption_configuration: Optional[Dict[str, Any]] = None,
+    ) -> Tuple[str, datetime]:
+        if name in [activity.name for activity in self.activities.values()]:
+            raise InvalidName(f"Activity with name {name} already exists")
+        activity = Activity(
+            self.account_id, self.region_name, name, tags, encryption_configuration
+        )
+        self.activities[activity.arn] = activity
+        return activity.arn, activity.creation_date
+
+    def list_activities(self, max_results, next_token):
+        # implement here
+        return activities, next_token
+    
+    def describe_activity(self, activity_arn):
+        # implement here
+        return activity_arn, name, creation_date, encryption_configuration
+    
 
 stepfunctions_backends = BackendDict(StepFunctionBackend, "stepfunctions")
