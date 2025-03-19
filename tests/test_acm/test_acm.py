@@ -9,6 +9,7 @@ from freezegun import freeze_time
 
 from moto import mock_aws, settings
 from moto.core import DEFAULT_ACCOUNT_ID as ACCOUNT_ID
+from moto.acm import acm_backends
 from tests.test_elbv2.test_elbv2 import create_load_balancer
 
 RESOURCE_FOLDER = os.path.join(os.path.dirname(__file__), "resources")
@@ -538,6 +539,33 @@ def test_request_certificate_with_certificate_authority():
     )
     assert "CertificateArn" in resp
 
+
+@mock_aws
+def test_request_certificate_override_issuer():
+    region = "us-west-1"
+    client = boto3.client("acm", region_name=region)
+
+    token = str(uuid.uuid4())
+
+    resp = client.request_certificate(
+        DomainName="google.com",
+        IdempotencyToken=token,
+        SubjectAlternativeNames=["google.com", "www.google.com", "mail.google.com"],
+    )
+    assert "CertificateArn" in resp
+    arn = resp["CertificateArn"]
+    assert f"arn:aws:acm:{region}:{ACCOUNT_ID}:certificate/" in arn
+
+    # Override the issuer
+    acm_backend = acm_backends[ACCOUNT_ID][region]
+    acm_backend._certificates[arn].generate_cert
+
+    resp = client.request_certificate(
+        DomainName="google.com",
+        IdempotencyToken=token,
+        SubjectAlternativeNames=["google.com", "www.google.com", "mail.google.com"],
+    )
+    assert resp["CertificateArn"] == arn
 
 @mock_aws
 def test_operations_with_invalid_tags():

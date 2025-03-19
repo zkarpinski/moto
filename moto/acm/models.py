@@ -161,6 +161,7 @@ class CertBundle(BaseModel):
         region: str,
         sans: Optional[List[str]] = None,
         cert_authority_arn: Optional[str] = None,
+        issuer_name: Optional[str] = None,
     ) -> "CertBundle":
         unique_sans: Set[str] = set(sans) if sans else set()
 
@@ -184,11 +185,11 @@ class CertBundle(BaseModel):
         issuer = cryptography.x509.Name(
             [  # C = US, O = Amazon, OU = Server CA 1B, CN = Amazon
                 cryptography.x509.NameAttribute(NameOID.COUNTRY_NAME, "US"),
-                cryptography.x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Amazon"),
+                cryptography.x509.NameAttribute(NameOID.ORGANIZATION_NAME, issuer_name),
                 cryptography.x509.NameAttribute(
                     NameOID.ORGANIZATIONAL_UNIT_NAME, "Server CA 1B"
                 ),
-                cryptography.x509.NameAttribute(NameOID.COMMON_NAME, "Amazon"),
+                cryptography.x509.NameAttribute(NameOID.COMMON_NAME, issuer_name),
             ]
         )
         cert = (
