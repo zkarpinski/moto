@@ -203,8 +203,8 @@ def write_documentation(supported):
 if __name__ == "__main__":
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-resource-specification.html
     cfn_spec = requests.get(
-        "https://dnwj8swjjbsbt.cloudfront.net/latest/gzip/CloudFormationResourceSpecification.json"
-    ).json()
+        "https://dnwj8swjjbsbt.cloudfront.net/latest/gzip/CloudFormationResourceSpecification.json", 
+    timeout=60).json()
     # Only collect checklists for models that implement CloudFormationModel;
     # otherwise the checklist is very long and mostly empty because there
     # are so many niche AWS services and resources that moto doesn't implement yet.
