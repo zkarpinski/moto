@@ -190,7 +190,7 @@ def main():
     args = process_cmdline_args()
 
     # Get the list of links for all the services.
-    page = requests.get(AWS_CONFIG_MANAGED_RULES_URL_START + LIST_OF_RULES_URL)
+    page = requests.get(AWS_CONFIG_MANAGED_RULES_URL_START + LIST_OF_RULES_URL, timeout=60)
     tree = html.fromstring(page.content)
     links = [
         x.lstrip("./") for x in tree.xpath('//div[@class="highlights"]//ul//a/@href')
@@ -209,7 +209,7 @@ def main():
     for link in links:
         if args.verbose:
             print(f"Extracting from {link} ...")
-        page = requests.get(AWS_CONFIG_MANAGED_RULES_URL_START + link)
+        page = requests.get(AWS_CONFIG_MANAGED_RULES_URL_START + link, timeout=60)
         rule_name = link.rstrip(".html")
         rules = extract_managed_rule_info(html.fromstring(page.content), rule_name)
 

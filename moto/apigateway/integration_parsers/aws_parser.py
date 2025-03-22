@@ -20,7 +20,7 @@ class TypeAwsParser(IntegrationParser):
             if service == "dynamodb" and path_or_action == "action":
                 target_url = f"https://dynamodb.{region}.amazonaws.com/"
                 headers = {"X-Amz-Target": f"DynamoDB_20120810.{action}"}
-                res = requests.post(target_url, request.body, headers=headers)
+                res = requests.post(target_url, request.body, headers=headers, timeout=60)
                 return res.status_code, res.content
             else:
                 return (

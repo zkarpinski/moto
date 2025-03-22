@@ -283,7 +283,7 @@ class Subscription(BaseModel):
                 self.endpoint,
                 json=post_data,
                 headers={"Content-Type": "text/plain; charset=UTF-8"},
-            )
+            timeout=60)
         elif self.protocol == "lambda":
             # TODO: support bad function name
             # http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html

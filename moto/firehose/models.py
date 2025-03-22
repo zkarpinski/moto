@@ -429,7 +429,7 @@ class FirehoseBackend(BaseBackend):
             "records": [{"data": record["Data"]} for record in records],
         }
         try:
-            requests.post(url, json=record_to_send, headers=headers)
+            requests.post(url, json=record_to_send, headers=headers, timeout=60)
         except Exception as exc:
             # This could be better ...
             raise RuntimeError(

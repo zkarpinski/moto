@@ -136,7 +136,7 @@ class Recorder:
                 if parsed_url.query:
                     url = f"{url}?{parsed_url.query}"
             headers = row_loaded.get("headers")
-            requests.request(method=method, url=url, headers=headers, data=body)
+            requests.request(method=method, url=url, headers=headers, data=body, timeout=60)
 
         # restore the recording setting
         self._user_enabled = old_setting
