@@ -132,8 +132,7 @@ class _TemplateEnvironmentMixin(object):
             loader = DynamicDictLoader({})
             environment = Environment(
                 loader=loader,
-                autoescape=self.should_autoescape,
-                trim_blocks=True,
+                autoescape=True, trim_blocks=True,
                 lstrip_blocks=True,
             )
             JINJA_ENVS[key] = environment

@@ -139,7 +139,7 @@ def render_template(tmpl_dir, tmpl_filename, context, service, alt_filename=None
     """Create specified files from Jinja templates for specified service."""
     is_test = "test" in tmpl_dir
     rendered = (
-        jinja2.Environment(loader=jinja2.FileSystemLoader(tmpl_dir))
+        jinja2.Environment(loader=jinja2.FileSystemLoader(tmpl_dir), autoescape=True)
         .get_template(tmpl_filename)
         .render(context)
     )
