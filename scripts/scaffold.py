@@ -544,8 +544,9 @@ def insert_code_to_class(path, base_class, new_code):
         _[1] for _ in clsmembers if issubclass(_[1], base_class) and _[1] != base_class
     ]
     if len(_response_cls) != 1:
-        raise Exception("unknown error, number of clsmembers is not 1")
-    response_cls = _response_cls[0]
+        response_cls = _response_cls[1]
+    else:
+        response_cls = _response_cls[0]
     code_lines, line_no = inspect.getsourcelines(response_cls)
     end_line_no = line_no + len(code_lines)
 

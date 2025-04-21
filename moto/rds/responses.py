@@ -803,3 +803,18 @@ class RDSResponse(BaseResponse):
         if len(all_resources) > start + page_size:
             next_marker = paginated_resources[-1].resource_id
         return paginated_resources, next_marker
+    
+    def describe_db_parameters(self) ->  ActionResult:
+        db_parameter_group_name = self.parameters.get("DBParameterGroupName")
+        source = self.parameters.get("Source")
+        filters = self.parameters.get("Filters")
+        max_records = self.parameters.get("MaxRecords")
+        marker = self.parameters.get("Marker")
+        parameters = self.backend.describe_db_parameters(
+            db_parameter_group_name=db_parameter_group_name,
+            source=source,
+            filters=filters,
+            max_records=max_records,
+        )
+        result = {"Parameters": parameters}
+        return ActionResult(result)

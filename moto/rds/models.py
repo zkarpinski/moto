@@ -3867,6 +3867,11 @@ class RDSBackend(BaseBackend):
         database = self.databases[db_instance_identifier]
         return database.log_file_manager.files
 
+    def describe_db_parameters(self, db_parameter_group_name: str, source: str, filters: List[Dict[str,Any]], max_records: int):
+        group = self.db_cluster_parameter_groups[db_parameter_group_name]
+        
+        return parameters, marker
+    
 
 class OptionGroup(RDSBaseModel):
     resource_type = "og"

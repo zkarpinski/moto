@@ -3659,3 +3659,17 @@ def test_db_instance_identifier_is_case_insensitive(client):
 
     response = client.describe_db_instances()
     assert len(response["DBInstances"]) == 0
+
+
+@mock_aws
+def test_describe_db_parameters():
+    client = boto3.client("rds", region_name="us-east-2")
+
+    db_parameter_group = client.create_db_parameter_group(
+        DBParameterGroupName="test",
+        DBParameterGroupFamily="mysql5.6",
+        Description="test parameter group",
+    )
+    resp = client.describe_db_parameters(DBParameterGroupName="test")
+
+    raise Exception("NotYetImplemented")
