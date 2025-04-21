@@ -3871,7 +3871,6 @@ class RDSBackend(BaseBackend):
         if db_parameter_group_name not in self.db_parameter_groups:
             raise DBClusterParameterGroupNotFoundError(db_parameter_group_name)
         group = self.db_parameter_groups[db_parameter_group_name]
-
         return group.parameters
     
 

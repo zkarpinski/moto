@@ -816,5 +816,5 @@ class RDSResponse(BaseResponse):
             filters=filters,
             max_records=max_records,
         )
-        result = {"Parameters": parameters}
+        result = {"Parameters": parameters.values()}
         return ActionResult(result)

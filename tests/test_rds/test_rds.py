@@ -3684,7 +3684,15 @@ def test_describe_db_parameters():
     )
 
     resp = client.describe_db_parameters(DBParameterGroupName="test")
-    assert resp["Parameters"] == []
-    assert resp["ResponseMetadata"]["HTTPStatusCode"] == 200
+    assert len(resp["Parameters"]) == 1
+    assert resp["Parameters"] == [
+        {
+            "ParameterName": "foo",
+            "ParameterValue": "foo_val_1",
+            "Description": "test param",
+            "ApplyMethod": "immediate",
+        }
+    ]
+
     
 
