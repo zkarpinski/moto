@@ -3665,11 +3665,26 @@ def test_db_instance_identifier_is_case_insensitive(client):
 def test_describe_db_parameters():
     client = boto3.client("rds", region_name="us-east-2")
 
-    db_parameter_group = client.create_db_parameter_group(
+    client.create_db_parameter_group(
         DBParameterGroupName="test",
         DBParameterGroupFamily="mysql5.6",
         Description="test parameter group",
     )
-    resp = client.describe_db_parameters(DBParameterGroupName="test")
 
-    raise Exception("NotYetImplemented")
+    client.modify_db_parameter_group(
+        DBParameterGroupName="test",
+        Parameters=[
+            {
+                "ParameterName": "foo",
+                "ParameterValue": "foo_val_1",
+                "Description": "test param",
+                "ApplyMethod": "immediate",
+            }
+        ],
+    )
+
+    resp = client.describe_db_parameters(DBParameterGroupName="test")
+    assert resp["Parameters"] == []
+    assert resp["ResponseMetadata"]["HTTPStatusCode"] == 200
+    
+

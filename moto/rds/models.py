@@ -3868,9 +3868,11 @@ class RDSBackend(BaseBackend):
         return database.log_file_manager.files
 
     def describe_db_parameters(self, db_parameter_group_name: str, source: str, filters: List[Dict[str,Any]], max_records: int):
-        group = self.db_cluster_parameter_groups[db_parameter_group_name]
-        
-        return parameters, marker
+        if db_parameter_group_name not in self.db_parameter_groups:
+            raise DBClusterParameterGroupNotFoundError(db_parameter_group_name)
+        group = self.db_parameter_groups[db_parameter_group_name]
+
+        return group.parameters
     
 
 class OptionGroup(RDSBaseModel):
