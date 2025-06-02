@@ -29,7 +29,7 @@ def get_template_summary_response_from_template(template_body: str) -> Dict[str,
     yaml.add_multi_constructor("", yaml_tag_constructor)
 
     try:
-        template_dict = yaml.load(template_body, Loader=yaml.Loader)
+        template_dict = yaml.load(template_body, Loader=yaml.SafeLoader)
     except (ParserError, ScannerError):
         template_dict = json.loads(template_body)
 
