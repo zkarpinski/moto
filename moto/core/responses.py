@@ -19,7 +19,6 @@ from typing import (
     Union,
 )
 from urllib.parse import parse_qs, parse_qsl, urlparse
-from xml.dom.minidom import parseString as parseXML
 
 import boto3
 import requests
@@ -41,6 +40,7 @@ from moto.core.utils import (
 )
 from moto.utilities.aws_headers import gen_amzn_requestid_long
 from moto.utilities.utils import get_partition, load_resource, load_resource_as_bytes
+import defusedxml.minidom
 
 log = logging.getLogger(__name__)
 
@@ -157,7 +157,7 @@ class _TemplateEnvironmentMixin(object):
         if not self.contains_template(template_id):
             if settings.PRETTIFY_RESPONSES:
                 # pretty xml
-                xml = parseXML(source).toprettyxml()
+                xml = defusedxml.minidom.parseString(source).toprettyxml()
             else:
                 # collapsed xml
                 xml = re.sub(
