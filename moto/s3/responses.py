@@ -3,7 +3,6 @@ import re
 import urllib.parse
 from typing import Any, Dict, Iterator, List, Optional, Tuple, Type, Union
 from urllib.parse import parse_qs, unquote, urlencode, urlparse, urlunparse
-from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 
 import xmltodict
@@ -77,6 +76,7 @@ from .utils import (
     metadata_from_headers,
     parse_region_from_url,
 )
+import defusedxml.minidom
 
 DEFAULT_REGION_NAME = "us-east-1"
 
@@ -2549,7 +2549,7 @@ class S3Response(BaseResponse):
         return 204, {}, template.render(version_id=version_id)
 
     def _complete_multipart_body(self, body: bytes) -> Iterator[Tuple[int, str]]:
-        ps = minidom.parseString(body).getElementsByTagName("Part")
+        ps = defusedxml.minidom.parseString(body).getElementsByTagName("Part")
         prev = 0
         for p in ps:
             pn = int(p.getElementsByTagName("PartNumber")[0].firstChild.wholeText)  # type: ignore[union-attr]

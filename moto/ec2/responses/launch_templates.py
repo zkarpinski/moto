@@ -1,11 +1,11 @@
 from typing import Any
-from xml.dom import minidom
 from xml.etree import ElementTree
 
 from moto.ec2.exceptions import FilterNotImplementedError
 from moto.moto_api._internal import mock_random
 
 from ._base_response import EC2BaseResponse
+import defusedxml.minidom
 
 
 def xml_root(name: str) -> ElementTree.Element:
@@ -46,7 +46,7 @@ def xml_serialize(tree: ElementTree.Element, key: str, value: Any) -> None:
 
 def pretty_xml(tree: ElementTree.Element) -> str:
     rough = ElementTree.tostring(tree, "utf-8")
-    parsed = minidom.parseString(rough)
+    parsed = defusedxml.minidom.parseString(rough)
     return parsed.toprettyxml(indent="    ")
 
 
