@@ -102,7 +102,7 @@ class RESTError(HTTPException):
         "wrapped_single_error": WRAPPED_SINGLE_ERROR_RESPONSE,
         "error": ERROR_RESPONSE,
     }
-    env = Environment(loader=DictLoader(templates))
+    env = Environment(loader=DictLoader(templates), autoescape=True)
 
     def __init__(
         self, error_type: str, message: str, template: str = "error", **kwargs: Any
@@ -142,7 +142,7 @@ class RESTError(HTTPException):
     @classmethod
     def extended_environment(cls, extended_templates: Dict[str, str]) -> Environment:
         templates = cls.templates | extended_templates
-        return Environment(loader=DictLoader(templates))
+        return Environment(loader=DictLoader(templates), autoescape=True)
 
 
 class DryRunClientError(RESTError):
